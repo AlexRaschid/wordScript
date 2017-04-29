@@ -1,17 +1,9 @@
 #input{
     height: 1000px;
-    border-color: #ffffff;
-}
-#wow{
-    float: left;
-    padding: 0;
-    margin-left: -10px;
-    margin-top: 0;
-    color: blue;
 }
 
 #output{
-    background-color: black;
+    /*background-color: black;*/
     height: 1000px;
     z-index: 10;
 }
@@ -35,6 +27,15 @@
         right: 0;
         bottom: 0;
         left: 0;
+        font-size: 20px;
+ }
+  #editor2 { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        font-size: 20px;
  }
  #okay {
     margin: auto;
@@ -43,8 +44,14 @@
     text-align: center;
     
  }
- #okay:hover,#wow:hover{
+ #okay:hover{
      color:blue;
      text-decoration: none;
+ }
+ 
+ wordScriptTxt{
+    color: white;     
+     
+     
  }
  

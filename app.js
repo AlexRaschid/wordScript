@@ -6,6 +6,14 @@ var data = {
 var editor = ace.edit("editor"); // the numbering
     editor.setTheme("ace/theme/monokai"); // theme
     editor.getSession().setMode("ace/mode/javascript");  // language want to use
+    editor.setValue("# Start your work here\n"); // adding a value
+    
+
+var editor2 = ace.edit("editor2"); // the numbering
+    editor2.setTheme("ace/theme/chrome"); // theme
+    editor2.getSession().setMode("ace/mode/javascript");  // language want to use
+    editor2.setReadOnly(true);   // make the editor only read 
+    editor2.setValue("//Javascript will appear here\n");
 
 function print( input ) {
     
@@ -23,19 +31,23 @@ function print( input ) {
 
 function makeFunction( input ) {
     
-    console.log(input);
-    {
+    data.func.push({
         func_name: input[2],
-        params: input[3],
-        
-    }
-//     input = input.split (':') 
-//     for ( var i = 0, i < input.length; i++);
+        params: input[4],
+        body: input.splice(5, input.length).join(' ')
+    });
     
-//     data.func.push({
-//         name: input[i],
-//         value: input[i]
-//     });
+}
+
+function callFunction ( input ) {
+    
+    for(var i = 0; i < data.func.length; i++) {
+        
+        if (data.func[i].func_name === input){
+            // console.log(data.func[i]func_name);
+            return "function " + data.func[i].func_name +"("+ data.func[i].params +") { " + data.func[i].body +" }";
+        }
+    }
 }
 
 function makeVariable( input ) {
@@ -74,7 +86,7 @@ function parseInput( input ) {
                     break;
                 case 'function':
                     // console.log( input[1].toLowerCase() );
-                    makeFunction( input );
+                    output = makeFunction( input );
                     break;
             }
             break;
@@ -86,10 +98,14 @@ function parseInput( input ) {
             
             //makeCall( input );
             break;
+        case '#':
+            break;
         default:
+            //console.log( input );
+            output = input;
             break;
     }
-    console.log(output)
+    return output;
 }
 
 $(document).ready(function(){
@@ -97,12 +113,19 @@ $(document).ready(function(){
         if(key.which === 13){
             
             var input = editor.getValue().split('\n');
+            
+            var output = '';
             for(var i in input){
-                $(".output").append("<p class = 'wordScriptTxt'>" + parseInput(input[i]) + "</p>");
+                output += parseInput( input[i] ) + '\n';
+                
+                if ( output !== undefined ) {
+                    console.log("undefined");
+                    editor2.setValue( output );
+                }
+
                 
             }
             
-            // parseInput();
         }
         
         
@@ -110,7 +133,9 @@ $(document).ready(function(){
     
     
 });
-
+$("#print").click(function(){
+   
+});
 
 
 // makeVariable('make variabel x : "3"');
