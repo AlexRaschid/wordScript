@@ -5,7 +5,6 @@ body{
     background-color: #00ffff;
 }
 #output{
-    /*background-color: black;*/
     height: 1000px;
     z-index: 10;
 }
@@ -14,46 +13,42 @@ body{
     width: 120% !important;
     float: left;
     height:100% !important;
-    
+
 }
 #keyWord{
     float: left;
     font-size: 20px;
 }
+
 #keyList{
     margin-top: 30px !important;
 }
- #editor { 
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        font-size: 15px;
- }
-  #editor2 { 
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        font-size: 15px;
- }
- #okay {
+
+#editor { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: 15px;
+}
+
+#editor2 { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-size: 15px;
+}
+#okay {
     margin: auto;
     width: 50%;
     color:blue;
     text-align: center;
-    
- }
- #okay:hover{
-     color:blue;
-     text-decoration: none;
- }
- 
- wordScriptTxt{
-    color: white;     
-     
-     
- }
- 
+
+}
+#okay:hover{
+    color:blue;
+    text-decoration: none;
+}

@@ -1,22 +1,22 @@
 var data = {
     variables: [],
-    func: [],
-    // save: []
+    func: []
 };
 
 var editor = ace.edit("editor"); // the numbering
-    editor.setTheme("ace/theme/monokai"); // theme
-    editor.getSession().setMode("ace/mode/javascript");  // language want to use
-    editor.setValue("//Start your work here\n"); // adding a value
-    editor.session.setOption("useWorker", false); //disable the corrections
+editor.setTheme("ace/theme/monokai"); // theme
+editor.getSession().setMode("ace/mode/javascript");  // language want to use
+editor.setValue("//Start your work here\n"); // adding a value
+editor.session.setOption("useWorker", false); //disable the corrections
     
 
 var editor2 = ace.edit("editor2"); // the numbering
-    editor2.setTheme("ace/theme/chrome"); // theme
-    editor2.getSession().setMode("ace/mode/javascript");  // language want to use
-    editor2.setReadOnly(true);   // make the editor only read 
-    editor2.setValue("//Javascript will appear here\n");
-    editor2.session.setOption("useWorker", false);
+editor2.setTheme("ace/theme/chrome"); // theme
+editor2.getSession().setMode("ace/mode/javascript");  // language want to use
+editor2.setReadOnly(true);   // make the editor only read 
+editor2.setValue("//Javascript will appear here\n");
+editor2.session.setOption("useWorker", false);
+
 
 function print( input ) {
     
@@ -61,22 +61,15 @@ function callFunction( input ) {
         if (data.func[i].func_name === input[1]){
             
             return input[1] + '('+ input[input.length - 1] +');';
-            // var x = input[input.length - 1];
-            // console.log( eval( data.func[i].body ) );
         }
     }
 }
 
-//string func
-//eval string func
-//eval f(x) 
-//
 
 function makeVariable( input ) {
     
     input = input.split(':');
     
-    // console.log( input );
     for ( var i = 0; i < input.length; i+=2 ) {
         
         data.variables.push({ 
@@ -93,7 +86,8 @@ function parseInput( input ) {
     
     input = input.split(' ');
     var output;
-    // input data: 'make vairbale x:3'
+    
+    // input data: 'make variable x:3'
     // output data: ['make' 'variable' 'x:3']
     
     switch ( input[0].toLowerCase() ) {
@@ -108,7 +102,6 @@ function parseInput( input ) {
                     break;
                 case 'function':
                     
-                    // console.log( input[1].toLowerCase() );
                     var func_name = makeFunction( input );
                     output = printFunction( func_name );
                     break;
@@ -123,10 +116,11 @@ function parseInput( input ) {
             output = callFunction( input );
             break;
         case '#':
+            
             output = '';
             break;
         default:
-            //console.log( input );
+            
             output = input;
             break;
     }
@@ -156,49 +150,55 @@ $(document).ready(function(){
         
     });   
     
+   $("#print").click(function(){
+        
+        editor.insert("\nprint ");
+        $("#editor").keydown();
+    });
+    $("#function").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nmake function ");
+    });
+    $("#parameter").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nparams ");
+    });
+    $("#make").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nmake ");
+    });
+    $("#call").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\ncall ");
+    });
+    $("#if").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nif");
+    });
+    $("#for").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nfor");
+    });
+    $("#var").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nmake var ");
+    });
+    $("#while").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nwhile ");
+    });
+    $("#else").click(function(){
+        
+        $("#editor").keydown()
+        editor.insert("\nelse ");
+    });
     
 });
-$("#print").click(function(){
-    editor.insert("print\n");
-    $("#editor").keydown();
-});
-$("#function").click(function(){
-    $("#editor").keydown()
-    editor.insert("function\n");
-});
-$("#parameter").click(function(){
-    $("#editor").keydown()
-    editor.insert("parameter\n");
-});
-$("#make").click(function(){
-    $("#editor").keydown()
-    editor.insert("make\n");
-});
-$("#call").click(function(){
-    $("#editor").keydown()
-    editor.insert("call\n");
-});
-$("#if").click(function(){
-    $("#editor").keydown()
-    editor.insert("if\n");
-});
-$("#for").click(function(){
-    $("#editor").keydown()
-    editor.insert("for\n");
-});
-$("#var").click(function(){
-    $("#editor").keydown()
-    editor.insert("var\n");
-});
-$("#while").click(function(){
-    $("#editor").keydown()
-    editor.insert("while\n");
-});
-$("#else").click(function(){
-    $("#editor").keydown()
-    editor.insert("else\n");
-});
-
-
-// makeVariable('make variabel x : "3"');
-// $(document).ready(function());
