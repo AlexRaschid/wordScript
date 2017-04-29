@@ -55,18 +55,20 @@ function printFunction( input ) {
 }
 
 function callFunction( input ) {
+    
     for(var i = 0; i < data.func.length; i++) {
         
-        if (data.func[i].func_name === input){
+        if (data.func[i].func_name === input[1]){
             
-            // var func eval( data.func[i].func_name )
+            return input[1] + '('+ input[input.length - 1] +');';
+            // var x = input[input.length - 1];
+            // console.log( eval( data.func[i].body ) );
         }
     }
 }
 
 //string func
 //eval string func
-//eval arguments x ..
 //eval f(x) 
 //
 
@@ -118,7 +120,7 @@ function parseInput( input ) {
             break;
         case 'call':
             
-            // callFunction( input );
+            output = callFunction( input );
             break;
         case '#':
             output = '';
@@ -178,7 +180,7 @@ $("#call").click(function(){
 });
 $("#if").click(function(){
     $("#editor").keydown()
-    editor.insert("for\n");
+    editor.insert("if\n");
 });
 $("#for").click(function(){
     $("#editor").keydown()
