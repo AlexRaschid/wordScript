@@ -1,12 +1,13 @@
 var data = {
     variables: [],
-    func: []
+    func: [],
+    code_gist: []
 };
 
 var editor = ace.edit("editor"); // the numbering
 editor.setTheme("ace/theme/monokai"); // theme
 editor.getSession().setMode("ace/mode/javascript");  // language want to use
-editor.setValue("//Start your work here\n"); // adding a value
+editor.setValue("# Start your work here\n"); // adding a value
 editor.session.setOption("useWorker", false); //disable the corrections
     
 
@@ -14,7 +15,7 @@ var editor2 = ace.edit("editor2"); // the numbering
 editor2.setTheme("ace/theme/chrome"); // theme
 editor2.getSession().setMode("ace/mode/javascript");  // language want to use
 editor2.setReadOnly(true);   // make the editor only read 
-editor2.setValue("//Javascript will appear here\n");
+editor2.setValue("// Javascript will appear here\n");
 editor2.session.setOption("useWorker", false);
 
 
@@ -82,6 +83,16 @@ function makeVariable( input ) {
 
 }
 
+function makeLoop( input ) {
+    
+    var start = input[2];
+    var end = input[input.length - 1];
+    
+    return 'for ( var i = '+ start +'; i < '+ end +'; i++ ) {\n console.log(i);\n}'
+}
+
+
+
 function parseInput( input ) {
     
     input = input.split(' ');
@@ -95,6 +106,10 @@ function parseInput( input ) {
             
             switch ( input[1].toLowerCase() ) {
                 
+                case 'loop':
+                    
+                    output = makeLoop( input );
+                    break;
                 case 'var':
                     
                     // target index two as the variable
@@ -117,7 +132,7 @@ function parseInput( input ) {
             break;
         case '#':
             
-            output = '';
+            output = '// ' + input.splice(1, input.length).join(' ');
             break;
         default:
             
@@ -133,7 +148,7 @@ $(document).ready(function(){
         if(key.which === 13){
             
             var input = editor.getValue().split('\n');
-            
+            ['make var x:3']
             var output = '';
             for(var i in input){
                 output += parseInput( input[i] ) + '\n';
