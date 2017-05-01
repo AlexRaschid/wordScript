@@ -8,10 +8,16 @@ What's next with this project is to incorporate more software languages with tex
 
 # features:
 ```
-//Start your work here
+# Start your work here
 # this a comment in wordScript
-make var x:3
-make function addTwo [x] return x + 2]
+
+make var x : 3
+
+make function addTwo [x] return x + 2
 call addTwo with args 3
+
 print 'hi'
+
+make loop 1 to 5
+
 ```
