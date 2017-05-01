@@ -1,7 +1,8 @@
 var data = {
     variables: [],
     func: [],
-    wordGist: []
+    wordGist: [],
+    code: ''
 };
 
 var editor = ace.edit("editor"); // the numbering
@@ -42,14 +43,11 @@ function makeFunction( input ) {
         body: input.splice(4, input.length).join(' ')
     });
     
-    return input[2];
-}
+    var func_name = input[2];
 
-function printFunction( input ) {
-    
     for(var i = 0; i < data.func.length; i++) {
         
-        if (data.func[i].func_name === input){
+        if (data.func[i].func_name === func_name ){
             
             var body = data.func[i].body;
             
@@ -131,8 +129,7 @@ function parseInput( input ) {
                     break;
                 case 'function':
                     
-                    var func_name = makeFunction( input );
-                    output = printFunction( func_name );
+                    output = makeFunction( input );
                     break;
             }
             break;
@@ -156,7 +153,12 @@ function parseInput( input ) {
     
     return output;
 }
-
+// arg = [x,y,z];
+// "[x,y,z]"
+// arg.slice(1, arg.length - 1)
+// "x,y,z"
+// arg.slice(1, arg.length - 1).split(',')
+// ["x", "y", "z"]
 $(document).ready(function(){
     $("#editor").keydown(function(key){
         if(key.which === 13){
