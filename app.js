@@ -47,14 +47,13 @@ function run() {
 
 function print( input ) {
     
+    input = input.splice(1, input.length);
+    
     if ( input.length === 1 ) {
         
         // return back the translated javascript code
         return 'console.log('+ input.join(' ') +');';
     }
-    
-    
-    input = input.splice(1, input.length);
     
     /*
         checks with the input is a variable already
