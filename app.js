@@ -32,7 +32,12 @@ function print( input ) {
     
 }
 
-
+// arg = [x,y,z];
+// "[x,y,z]"
+// arg.slice(1, arg.length - 1)
+// "x,y,z"
+// arg.slice(1, arg.length - 1).split(',')
+// ["x", "y", "z"]
 function makeFunction( input ) {
     
     data.func.push({
