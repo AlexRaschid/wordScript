@@ -1,4 +1,3 @@
-
 var editor = ace.edit("editor"); // the numbering
 editor.setTheme("ace/theme/monokai"); // theme
 editor.getSession().setMode("ace/mode/javascript");  // language want to use
@@ -121,7 +120,8 @@ function makeFunction( input ) {
             }
             else if ( body[0] === 'print' ) {
                 
-                body =  print( body.splice(1, body.length) );
+                
+                body =  print( body );
             }
             else {
                 
@@ -134,6 +134,23 @@ function makeFunction( input ) {
     }
     
     
+}
+
+
+function makeCondition( condition, input ) {
+    
+    input = input.split(' ').slice(1, input.length);
+    
+    if ( condition === 'if' ) {
+        
+        console.log( input );
+    }
+    if ( condition === 'else' ) {
+        
+        console.log( input );
+    }
+    
+    // console.log( input );
 }
 
 function callFunction( input ) {
@@ -282,6 +299,10 @@ function parseInput( input ) {
                     output = makeFunction( input );
                     break;
             }
+            break;
+        case 'if':
+            
+            output = makeCondition('if', input);
             break;
         case 'print':
             
