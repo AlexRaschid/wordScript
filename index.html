@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WordScript</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+
+<body>
+    <!--Dropdown-->
+    <div class="dropdown">
+        <button style='margin: 2px 0px 0px 10px;' class='btn btn-default btn-xs' id="keyWord" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Keywords
+            <span class="caret"></span>
+        </button>
+        <button id='save' style='margin: 2px 10px;' class="btn btn-success pull-right">save code</button>
+        <button id='run' class="btn btn-primary pull-right" style='margin: 2px 10px;'>run code</button>
+        
+        <ul class="dropdown-menu" aria-labelledby="dLabel" id="keyList">
+            <li id="print"><a href=#>print</li>
+            <li id="function"><a href=#>make function</li>
+            <li id="parameter"><a href=#>parameter</li>
+            <li id="make"><a href=#>make</li>
+            <li id="call"><a href=#>call</li>
+            <li id="loop"><a href=#>make loop</li>
+            <li id="var"><a href=#>make var</li>
+        </ul>
+    </div>
+    
+    <!--input and output-->
+    <h1 id="okay">WordScript</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-xs-6" id="input">
+               <div id="editor"></div>
+            </div>
+            <div class="col-md-6 col-xs-6" id="output">
+                <div id="editor2"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
