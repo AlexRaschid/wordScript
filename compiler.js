@@ -1,21 +1,8 @@
-var editor = ace.edit("editor"); // the numbering
-editor.setTheme("ace/theme/monokai"); // theme
-editor.getSession().setMode("ace/mode/javascript");  // language want to use
-editor.setValue("# Start your work here\n"); // adding a value
-editor.session.setOption("useWorker", false); //disable the corrections
+#!/usr/bin/env node
 
+var fs = require('fs');
 
-var editor2 = ace.edit("editor2"); // the numbering
-editor2.setTheme("ace/theme/chrome"); // theme
-editor2.getSession().setMode("ace/mode/javascript");  // language want to use
-editor2.setReadOnly(true);   // make the editor only read 
-editor2.setValue("// Javascript will appear here\n");
-editor2.session.setOption("useWorker", false);
-
-
-
-
-var data = {
+var global_object = {
     variables: [],
     func: [],
     wordGist: [],
@@ -37,10 +24,12 @@ function includes( array, item ) {
 function run() {
     
     try {
-        eval( data.code );
+        
+        eval( global_object.code );
     }
     catch(e) {
-        console.log('*error: ' + e.message);
+        
+        catchError('wordScript *error: ' + e.message);
     }
 }
 
@@ -51,33 +40,34 @@ function print( input ) {
     if ( input.length === 1 ) {
         
         // return back the translated javascript code
-        return 'console.log('+ input.join(' ') +');';
+        return `console.log( ${ input.join(' ') } );`;
     }
     
     /*
         checks with the input is a variable already
         declared in the data obj variables property
     */
-    for ( var i in data.variables ) {
+    for ( var i in global_object.variables ) {
         
         /*
             if it exsit then return back the
             stringifyed sjavascript code with 
             the value of the concated inside of the string
         */
-        if ( data.variables[i].name === input ) {
+        if ( includes( input, global_object.variables[i].name ) ) {
             
-            return 'console.log('+ data.variables[i].value +');';
+            return `console.log( ${ input.join(' ') } );`;
         }
     }
     
     if ( input[0] === 'call' ) {
         
         var func = callFunction( input );
-        // console.log( func.slice(0, func.length - 1) );
-        return 'console.log( ' + func.slice(0, func.length - 1) + ' );';
+        
+        return `console.log( ${ func.slice(0, func.length - 1) } );`;
     }
     
+    return `console.log( ${ input.join(' ') } );`
     
 }
 
@@ -89,12 +79,12 @@ function print( input ) {
 // ["x", "y", "z"]
 function makeFunction( input ) {
     
-    data.func = [];
+    global_object.func = [];
     
     
     var func_name = input[2];
     
-    data.func.push({
+    global_object.func.push({
         func_name: input[2],
         params: input[3][0] !== '[' ? null : input[3].slice(1, input[3].length - 1).split(','),
         body: input.length === 7 ? input.splice(3, input.length).join(' ') : input.splice(4, input.length).join(' ')
@@ -107,16 +97,16 @@ function makeFunction( input ) {
     // arg.slice(1, arg.length - 1).split(',')
     // ["x", "y", "z"]
 
-    for(var i = 0; i < data.func.length; i++) {
+    for(var i = 0; i < global_object.func.length; i++) {
         
-        if (data.func[i].func_name === func_name ){
+        if (global_object.func[i].func_name === func_name ){
             
-            var body = data.func[i].body.split(' ');
+            var body = global_object.func[i].body.split(' ');
             
             
             if ( body[0] !== 'return' && body[0] !== 'print' ) {
                 
-                body = 'return ' + body.join(' ') + ';';
+                body = `return ${ body.join(' ') } ;`;
             }
             else if ( body[0] === 'print' ) {
                 
@@ -125,11 +115,11 @@ function makeFunction( input ) {
             }
             else {
                 
-                body = body.join(' ') +';';
+                body = `${ body.join(' ') } ;`;
             }
             
             
-            return "function " + data.func[i].func_name +"("+ data.func[i].params +") { \n \t" + body +" \n}";
+            return `function ${ global_object.func[i].func_name} ( ${ global_object.func[i].params } ) { \n \t ${ body } \n}`;
         }
     }
     
@@ -155,19 +145,19 @@ function makeCondition( condition, input ) {
 
 function callFunction( input ) {
     
-    for(var i = 0; i < data.func.length; i++) {
+    for(var i = 0; i < global_object.func.length; i++) {
         
-        if (data.func[i].func_name === input[1]){
+        if (global_object.func[i].func_name === input[1]){
             
-            for ( var i in data.variables ) {
+            for ( var i in global_object.variables ) {
                 
-                if ( input[input.length - 1] === data.variables[i] ) {
+                if ( input[input.length - 1] === global_object.variables[i] ) {
                     
-                    return input[1] + '('+ data.variables[i] +');';
+                    return `${ input[1] } ( ${ global_object.variables[i] } );`;
                 }
             }
             
-            return input[1] + '('+ input[input.length - 1] +');';
+            return `${ input[1] } ( ${ input[input.length - 1] } );`;
         }
     }
     
@@ -208,14 +198,14 @@ function makeVariable( input ) {
             and push them to the data obj
             to variable property.
         */
-        data.variables.push({
+        global_object.variables.push({
             name: input[0],
             value: input[1],
         });
         
         
         // lastly return the javascript code of the fromated variable
-        return  'var ' + input[0] + ' = ' + input[1] + ';' ;
+        return  `var ${ input[0] } = ${ input[1] };`;
     }
     
     /*
@@ -233,42 +223,73 @@ function makeVariable( input ) {
         to the data obj and tore them in 
         the variables property
     */
-    data.variables.push({ 
+    global_object.variables.push({ 
         name: input[0].split(' ').join(''),
         value: input[1].split(' ').join('')
     });
     
     // lastly return the javascript code of the fromated variable
-    return 'var ' + input[0].split(' ').join('') + ' = ' + input[1].split(' ').join('') + ';';
+    return `var ${ input[0].split(' ').join('') } = ${ input[1].split(' ').join('') };`;
     
 
 }
 
 // saves the code that the user word in wordScript
-function makeWordGist() {
+/*function makeWordGist() {
     
-    /*
+    
         pushes the code to the 
         data obj to property wordGist
-    */
+    
     data.wordGist.push({
         name: prompt('name'),
         code: editor.getValue(),
         translated_code: data.code
     });
 
-}
+}*/
 
 // makes a loop
 function makeLoop( input ) {
     
     // gets the input of the frist and last offset
-    var start = input[2];
-    var end = input[input.length - 1];
+    
+    
+    if ( includes(input, ':') ) {
+        
+        if ( includes(input, 'print') ) {
+            
+            return `for ( var i = ${ input[ input.indexOf('to') - 1 ] }; i <= ${ input[ input.indexOf('to') + 1 ] }; i++ ) {\n     ${ print( input.splice( input.indexOf('print'), input.length ) )  } \n}`;
+        }
+        else {
+            
+            return `for ( var i = ${ input[ input.indexOf('to') - 1 ] }; i <= ${ input[ input.indexOf('to') + 1 ] }; i++ ) {\n     ${ input.splice(input.indexOf(':') + 1, input.length).join(' ') } \n}`;
+        }
+    }
     
     // return the translated javascript code
-    return 'for ( var i = '+ start +'; i <= '+ end +'; i++ ) {\n console.log( i );\n}'
+    return `for ( var i = ${ input[ input.indexOf('to') - 1 ] }; i <= ${ input[ input.indexOf('to') + 1 ] }; i++ ) {\n     console.log( i ); \n}`;
 }
+
+
+
+function catchError( err, callback ) {
+	
+	
+	if ( callback === undefined ) {
+
+		console.log( err || `*error: ${ err.message ? err.message : 'error returned ' + err }` );
+		return;
+	}
+	else if ( callback !== undefined ) {
+
+		return callback({
+			status: false,
+			msg: err || `*error: ${ err.message.split(' ').splice(1, err.message.split(' ').length).join(' ') }`
+		}, undefined);
+	}
+}
+
 
 // parsers the worScrit code
 function parseInput( input ) {
@@ -325,60 +346,37 @@ function parseInput( input ) {
     return output;
 }
 
+var arg = process.argv.splice(process.argv.length - 1, process.argv.length);
 
-
-
-$(document).ready(function(){
-    $("#editor").keydown(function(key){
-        if(key.which === 13){
+if ( arg.length !== 0 ) {
+    
+    fs.exists(`${ __dirname }/${ arg }`, ( err, rsp ) => {
+        if ( !err ) return catchError( err );
+        
+        fs.readFile(arg[0], 'utf8', ( err, data ) => {
+            if ( err ) return catchError( err );
             
-            var input = editor.getValue().split('\n');
+            var script = data.split('\n');
             
-            data.code = '';
-            for(var i in input){
-                data.code += parseInput( input[i] ) + '\n';
+            if ( script[0] === '<wordScript>' ) {
                 
-                if ( data.code !== undefined ) {
-                    editor2.setValue( data.code );
-                } 
-            }    
-        }
-    });
-    
-    $('#run').click(function() {
-        run();
-    });
-    
-    
-    $('#save').click(function() {
-        makeWordGist();
-    });
-   $("#print").click(function(){
-        
-        editor.insert("\nprint ");
-    });
-    $("#function").click(function(){
-        editor.insert("\nmake function ");
-    });
-    $("#parameter").click(function(){
-        
-        editor.insert("\n[  ]");
-    });
-    $("#make").click(function(){
-        
-        editor.insert("\nmake ");
-    });
-    $("#call").click(function(){
-        
-        editor.insert("\ncall ");
-    });
-    $("#loop").click(function(){
-        
-        editor.insert("\nmake loop");
-    });
-    $("#var").click(function(){
-        
-        editor.insert("\nmake var ");
-    });
-    
-});
+                for ( var l = 1; l < script.length; l ++ ) {
+                
+                    if ( script[l] !== '' ) {
+                        
+                        // parseInput( script[l] );
+                        global_object.code += parseInput( script[l] ) + '\n';
+                    }
+                }
+                
+                if ( global_object.code !== undefined ) {
+                    
+                    run();
+                }
+                return;
+            }
+            
+            return catchError(`wordScript *error:  '${ arg[0] }' is not a excutable wordScript file.`)
+        });
+    })
+}
